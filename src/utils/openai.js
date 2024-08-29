@@ -1,11 +1,14 @@
 import OpenAI from 'openai';
 
-const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
-
 const openai = new OpenAI({
-  apiKey: OPENAI_API_KEY,
+  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
   dangerouslyAllowBrowser: true
 });
+
+// Throw an error if the API key is not set
+if (!import.meta.env.VITE_OPENAI_API_KEY) {
+  throw new Error('OpenAI API key is not set. Please check your .env file.');
+}
 
 export async function getCourseRecommendations(userInfo) {
   try {
