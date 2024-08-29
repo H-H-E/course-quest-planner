@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { getCourseRecommendations } from "@/utils/openai";
+import { toast } from "sonner";
 import PersonalizedCoursePlan from "@/components/PersonalizedCoursePlan";
 
 export default function Component() {
@@ -55,9 +56,11 @@ export default function Component() {
       const recommendationsData = await getCourseRecommendations(formData);
       setRecommendations(recommendationsData);
       setIsModalOpen(true);
+      toast.success("Course recommendations generated successfully!");
     } catch (error) {
       console.error('Error getting recommendations:', error);
       setRecommendations(null);
+      toast.error("Failed to generate recommendations. Please try again.");
     }
     setIsLoading(false);
   };
