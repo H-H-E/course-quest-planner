@@ -7,7 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { getCourseRecommendations } from "@/utils/openai";
+import PersonalizedCoursePlan from "@/components/PersonalizedCoursePlan";
 
 export default function Component() {
   const [formData, setFormData] = useState({
@@ -29,8 +31,9 @@ export default function Component() {
     otherSupportNeeds: '',
     extracurricularActivities: ''
   });
-  const [recommendations, setRecommendations] = useState('');
+  const [recommendations, setRecommendations] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -49,11 +52,12 @@ export default function Component() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const recommendationsText = await getCourseRecommendations(formData);
-      setRecommendations(recommendationsText);
+      const recommendationsData = await getCourseRecommendations(formData);
+      setRecommendations(recommendationsData);
+      setIsModalOpen(true);
     } catch (error) {
       console.error('Error getting recommendations:', error);
-      setRecommendations('Error fetching recommendations. Please try again.');
+      setRecommendations(null);
     }
     setIsLoading(false);
   };
@@ -189,20 +193,6 @@ export default function Component() {
                 </form>
               </Card>
             </CarouselItem>
-            <CarouselItem>
-              <Card className="p-8">
-                <CardHeader>
-                  <CardTitle>Course Recommendations</CardTitle>
-                </CardHeader>
-                <div className="mt-4">
-                  {recommendations ? (
-                    <div className="whitespace-pre-wrap">{recommendations}</div>
-                  ) : (
-                    <div>Submit the form to get course recommendations.</div>
-                  )}
-                </div>
-              </Card>
-            </CarouselItem>
           </CarouselContent>
           <CarouselPrevious className="text-primary hover:text-primary-foreground">Previous Step</CarouselPrevious>
           <CarouselNext className="text-primary hover:text-primary-foreground">Next Step</CarouselNext>
@@ -221,6 +211,11 @@ export default function Component() {
           </div>
         </div>
       </footer>
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="max-w-4xl">
+          {recommendations && <PersonalizedCoursePlan user={recommendations} />}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
