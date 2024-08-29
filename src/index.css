@@ -28,15 +28,17 @@
 }
 
 @layer base {
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap');
+
   * {
     @apply border-border;
   }
 
   body {
-    @apply bg-background text-foreground font-body;
+    @apply bg-background text-foreground font-ibm-plex-mono;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-heading;
+    @apply font-ibm-plex-mono font-bold;
   }
 }

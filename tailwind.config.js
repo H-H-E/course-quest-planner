@@ -10,8 +10,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        heading: ['var(--font-heading)', ...fontFamily.mono],
-        body: ['var(--font-body)', ...fontFamily.mono]
+        'ibm-plex-mono': ['IBM Plex Mono', 'monospace'],
       },
       colors: {
         border: 'hsl(var(--border))',
